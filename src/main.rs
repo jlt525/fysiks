@@ -1,25 +1,31 @@
 #[derive(Debug)]
 struct Position(f64, f64, f64);
+#[derive(Debug)]
+struct Velocity(f64, f64, f64);
+#[derive(Debug)]
+struct Acceleration(f64, f64, f64);
+#[derive(Debug)]
+struct Momentum(f64, f64, f64);
 
 #[derive(Debug)]
 struct Object {
     mass: i32,
     position: Position,
-    velocity: f64,
-    momentum: f64,
+    velocity: Velocity,
+    momentum: Momentum,
 }
 
 impl Object {
     fn update_velocity(&mut self, acceleration: f64) {
-        self.velocity = self.velocity + (acceleration * 1.0);
+        self.velocity.2 = self.velocity.2 + acceleration;
     }
 
     fn update_momentum(&mut self) {
-        self.momentum = (self.mass as f64) * self.velocity;
+        self.momentum.2 = (self.mass as f64) * self.velocity.2;
     }
 
     fn update_position(&mut self) {
-        self.position.2 = self.position.2 + self.velocity
+        self.position.2 = self.position.2 + self.velocity.2
     }
 }
 
@@ -32,8 +38,8 @@ fn main() {
     let mut particle = Object {
         mass: 9,
         position: Position(0.0, 0.0, 0.0),
-        velocity: 0.0,
-        momentum: 0.0,
+        velocity: Velocity(0.0, 0.0, 0.0),
+        momentum: Momentum(0.0, 0.0, 0.0),
     };
 
     // do something
@@ -41,7 +47,7 @@ fn main() {
         dbg!(&particle);
         //println!("frame: {}, velocity: {}, momentum: {}, z position: {}", frame, particle.velocity, particle.momentum, particle.position.2);
 
-        if (particle.velocity + gravity) > max_down_velocity {
+        if (particle.velocity.2 + gravity) > max_down_velocity {
             particle.update_velocity(gravity);
         }
 
